@@ -2,41 +2,33 @@
  *  Copyright (C) 2018 BIRENCHENS
  *  All right reserved
  *
- *  Filename:       General_Model.cs
+ *  Filename:       General_DAL.cs
  *  Desctiption:    
  *
  *  CreateBy:       BIRENCHENS
- *  CreateDate:     2019-01-15 08:49:35
+ *  CreateDate:     2019-01-15 13:08:53
  *
  *  Version:        V1.0.0
  ***********************************************/
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DBUtility;
 
-namespace Builder.Constructer.Models
+namespace Builder.Constructer.DAL
 {
-    public class General_Model : IConstructible
+    public class General_DAL : IConstructible
     {
-        private readonly DataSet ds;
-
-        public General_Model()
-        {
-
-        }
 
         /// <summary>
-        /// Model 建造
+        /// DAL 建造
         /// </summary>
         /// <returns></returns>
         public StringBuilder Construct()
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
