@@ -72,13 +72,19 @@ namespace DBUtility
 
         private static DataSet _GetAllTablesStruct()
         {
-            StringBuilder querySQL = new StringBuilder("SP_COLUMNS ", 500);
+            DataSet ds = new DataSet();
 
-            querySQL.Append(
-                string.Join("\r\nGO\r\nSP_COLUMNS ", all_Tables.AsEnumerable().Select(row => row["name"]))
-            );
-
-            return Query(querySQL.ToString());
+            foreach (DataRow row in all_Tables.Rows)
+            {
+                if (row["name"].ToString() == "sysdiagrams")
+                    continue;
+                string querySQL = $"SP_COLUMNS {row["name"]}";
+                DataTable dt = Query(querySQL.ToString()).Tables[0].Copy();
+                dt.TableName = row["name"].ToString();
+                ds.Tables.Add(dt);
+            }
+            
+            return ds;
         }
 
         private static DataSet Query(string SQLString)

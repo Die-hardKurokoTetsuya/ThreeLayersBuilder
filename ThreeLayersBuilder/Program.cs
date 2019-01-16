@@ -11,13 +11,15 @@ namespace ThreeLayersBuilder
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                WriteLine("请输入数据库连接字符串");
-                return;
-            }
+            //if (args.Length == 0)
+            //{
+            //    WriteLine("请输入数据库连接字符串");
+            //    return;
+            //}
 
+            new Builder.Constructer.Models.General_Model().Construct();
 
+            ReadKey();
         }
     }
 }
