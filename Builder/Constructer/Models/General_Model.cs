@@ -11,18 +11,20 @@
  *  Version:        V1.0.0
  ***********************************************/
 
+using Builder.Constructer.Common;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using static DBUtility.DBHelperSQL;
 
 namespace Builder.Constructer.Models
 {
     public class General_Model : IConstructible
     {
+        private readonly string FILE_PATH = ConfigurationManager.AppSettings["ModelsFilePath"];
+
         private readonly DataSet ds;
         private StringBuilder contents;
 
@@ -36,13 +38,15 @@ namespace Builder.Constructer.Models
         /// Model 建造
         /// </summary>
         /// <returns></returns>
-        public StringBuilder Construct()
+        public void Construct()
         {
             Fill_Model(ds.Tables[0]);
 
-
-
-            return null;
+            foreach (DataTable dt in ds.Tables)
+            {
+                Fill_Model(dt);
+            }
+            
         }
 
         private void Fill_Model(DataTable dt)
@@ -56,10 +60,14 @@ namespace Models
 {{
     public class {dt.TableName} : ICloneable
     {{
-        {Get_Field(dt)}
+{Get_Field(dt)}
+
+{GetFunction(dt)}
     }}
-}}");
-            
+}}
+");
+
+            Out_File(dt.TableName, contents.ToString());
         }
 
         /// <summary>
@@ -76,104 +84,53 @@ namespace Models
                 string typeName = row["TYPE_NAME"].ToString();
                 bool nullable = Convert.ToBoolean(row["NULLABLE"]);
 
-                field.Append($@"      public {Get_Type(typeName, nullable)} {row["COLUMN_NAME"]} {{ get; set; }}
+                field.Append($@"        public {TypeConvert.SqlDBTypeToCSharpType(typeName, nullable)} {row["COLUMN_NAME"]} {{ get; set; }}
 ");
 
             }
             return field.ToString();
         }
 
-        private string Get_Type(string type, bool isNull)
-        {
-            if (string.IsNullOrWhiteSpace(type))
-                throw new Exception("数据类型不能为空");
-            string sqlType = type.Trim().Split(' ')[0];
-
-            if (isNull)
-            {
-                switch (sqlType.ToLower())
-                {
-                    case "bit": return "bool?";
-                    case "int":
-                    case "tinyint":
-                    case "smallint":
-                        return "int?";
-                    case "bigint": return "long?";
-                    case "smallmoney":
-                    case "money":
-                    case "numeric":
-                    case "decimal":
-                        return "decimal?";
-                    case "float": return "double?";
-                    case "real": return "float?";
-                    case "smalldatetime":
-                    case "datetime":
-                    case "timestamp":
-                        return "DataTime?";
-                    case "char":
-                    case "text":
-                    case "varchar":
-                    case "nchar":
-                    case "ntext":
-                    case "nvarchar":
-                        return "string";
-                    case "binary":
-                    case "varbinary":
-                    case "image":
-                        return "byte[]";
-                    case "uniqueidentifier": return "Guid";
-                    case "Variant": return "object";
-                    default:
-                        throw new Exception("未知的数据类型");
-                }
-            }
-            else
-            {
-                switch (sqlType.ToLower())
-                {
-                    case "bit": return "bool";
-                    case "int":
-                    case "tinyint":
-                    case "smallint":
-                    case "bigint":
-                        return "int";
-                    case "smallmoney":
-                    case "money":
-                    case "numeric":
-                    case "decimal":
-                        return "decimal";
-                    case "float": return "double";
-                    case "real": return "single";
-                    case "smalldatetime":
-                    case "datetime":
-                    case "timestamp":
-                        return "DataTime";
-                    case "char":
-                    case "text":
-                    case "varchar":
-                    case "nchar":
-                    case "ntext":
-                    case "nvarchar":
-                        return "string";
-                    case "binary":
-                    case "varbinary":
-                    case "image":
-                        return "byte[]";
-                    case "uniqueidentifier": return "Guid";
-                    case "Variant": return "object";
-                    default:
-                        throw new Exception("未知的数据类型");
-                }
-            }
-        }
-
         private string GetFunction(DataTable dt)
         {
             StringBuilder function = new StringBuilder(100);
 
+            function.Append($@"        public object Clone()
+        {{
+            {dt.TableName} model = new {dt.TableName}
+            {{
+{GetFuncField(dt)}
+            }};
+            return model;
+        }}
 
+        public Per_User_Group DeepClone()
+        {{
+            return Clone() as {dt.TableName};
+        }}");
 
             return function.ToString();
+        }
+
+        private string GetFuncField(DataTable dt)
+        {
+            StringBuilder funcField = new StringBuilder(50);
+            foreach (DataRow row in dt.Rows)
+            {
+                funcField.Append($@"                {row["COLUMN_NAME"]} = {row["COLUMN_NAME"]},
+");
+            }
+            return funcField.Remove(funcField.Length - 1, 1).ToString();
+        }
+
+        private void Out_File(string name, string contents)
+        {
+            string filePath = FILE_PATH + name + ".cs";
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(FILE_PATH);
+            }
+            File.WriteAllText(filePath, contents);
         }
     }
 }

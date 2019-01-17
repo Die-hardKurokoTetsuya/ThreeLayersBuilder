@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,12 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constructer\Common\TypeConvert.cs" />
     <Compile Include="Constructer\Constructer.cs" />
     <Compile Include="Constructer\DAL\General_DAL.cs" />
     <Compile Include="Constructer\IConstructible.cs" />
     <Compile Include="Constructer\Models\General_Model.cs" />
     <Compile Include="Director\Director.cs" />
-    <Compile Include="Product\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

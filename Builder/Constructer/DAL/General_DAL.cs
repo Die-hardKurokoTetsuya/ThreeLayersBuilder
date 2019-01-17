@@ -26,9 +26,8 @@ namespace Builder.Constructer.DAL
         /// DAL 建造
         /// </summary>
         /// <returns></returns>
-        public StringBuilder Construct()
+        public void Construct()
         {
-            return null;
         }
     }
 }

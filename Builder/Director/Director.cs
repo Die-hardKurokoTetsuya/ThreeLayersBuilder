@@ -27,9 +27,9 @@ namespace Builder.Director
             this.constructer = constructer;
         }
 
-        public Product.Product Build()
+        public void Build()
         {
-            return constructer.Build();
+            constructer.Build();
         }
     }
 }

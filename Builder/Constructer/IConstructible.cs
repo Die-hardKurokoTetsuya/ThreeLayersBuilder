@@ -21,6 +21,6 @@ namespace Builder.Constructer
     /// </summary>
     public interface IConstructible
     {
-        StringBuilder Construct();
+        void Construct();
     }
 }

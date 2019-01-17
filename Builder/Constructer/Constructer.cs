@@ -217,16 +217,12 @@ namespace Builder.Constructer
             constructibles_List.Add(constructible);
         }
 
-        public Product.Product Build()
+        public void Build()
         {
-            StringBuilder result = new StringBuilder(500);
-
             foreach (IConstructible constructible in constructibles_List)
             {
-                result.Append(constructible.Construct());
-            }
-
-            return new Product.Product(result);
+                constructible.Construct();
+            }   
         }
     }
 }

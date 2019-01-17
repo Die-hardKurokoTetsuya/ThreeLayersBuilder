@@ -17,7 +17,9 @@ namespace ThreeLayersBuilder
             //    return;
             //}
 
-            new Builder.Constructer.Models.General_Model().Construct();
+            //new Builder.Constructer.Models.General_Model().Construct();
+
+            WriteLine("执行完毕");
 
             ReadKey();
         }
