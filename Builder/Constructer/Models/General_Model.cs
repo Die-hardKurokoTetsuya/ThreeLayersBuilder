@@ -21,7 +21,7 @@ using static DBUtility.DBHelperSQL;
 
 namespace Builder.Constructer.Models
 {
-    public class General_Model : IConstructible
+    public class General_Model
     {
         private readonly string FILE_PATH = ConfigurationManager.AppSettings["ModelsFilePath"];
 
@@ -38,15 +38,15 @@ namespace Builder.Constructer.Models
         /// Model 建造
         /// </summary>
         /// <returns></returns>
-        public void Construct()
+        public StringBuilder Construct()
         {
-            Fill_Model(ds.Tables[0]);
 
             foreach (DataTable dt in ds.Tables)
             {
                 Fill_Model(dt);
             }
-            
+
+            return contents;
         }
 
         private void Fill_Model(DataTable dt)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Builder.Constructer.DAL;
+using Builder.Constructer.Models;
 using static System.Console;
 
 namespace ThreeLayersBuilder
@@ -17,7 +14,8 @@ namespace ThreeLayersBuilder
             //    return;
             //}
 
-            //new Builder.Constructer.Models.General_Model().Construct();
+            //new General_Model().Construct();
+            new General_DAL().Construct();
 
             WriteLine("执行完毕");
 
