@@ -14,7 +14,7 @@ namespace ThreeLayersBuilder
             //    return;
             //}
 
-            //new General_Model().Construct();
+            new General_Model().Construct();
             new General_DAL().Construct();
 
             WriteLine("执行完毕");

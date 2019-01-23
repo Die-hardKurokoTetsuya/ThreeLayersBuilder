@@ -104,7 +104,7 @@ namespace Models
             return model;
         }}
 
-        public Per_User_Group DeepClone()
+        public {dt.TableName} DeepClone()
         {{
             return Clone() as {dt.TableName};
         }}");
