@@ -30,9 +30,11 @@ namespace Builder.Constructer.DAL
         private readonly string FILE_PATH = ConfigurationManager.AppSettings["DALFilePath"];
 
         private readonly DataSet ds;
+        private string nameSpace = "";
 
-        public General_DAL()
+        public General_DAL(string nameSpace)
         {
+            this.nameSpace = nameSpace + ".";
             //  获取所有表的结构
             ds = GetAllTablesStruct();
         }
@@ -82,10 +84,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using DBUtility;
+using {nameSpace}DAL;
 
-namespace DAL.Table
+namespace {nameSpace}DAL.Table
 {{
-    public class {dt.TableName} : IDAL<Models.{dt.TableName}>
+    public class {dt.TableName} : IDAL<{nameSpace}Models.{dt.TableName}>
     {{
 ";
             return head;
@@ -105,7 +108,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(100);
 
-            result.Append($"\t\tpublic int Add(Models.{dt.TableName} model)\r\n");
+            result.Append($"\t\tpublic int Add({nameSpace}Models.{dt.TableName} model)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tStringBuilder insertSQL = new StringBuilder(200);\r\n");
             result.Append($"\t\t\tinsertSQL.Append(\"INSERT INTO {dt.TableName}(\");\r\n");
@@ -176,7 +179,7 @@ namespace DAL.Table
 
             StringBuilder result = new StringBuilder(100);
 
-            result.Append($"\t\tpublic bool Update(Models.{dt.TableName} model)\r\n");
+            result.Append($"\t\tpublic bool Update({nameSpace}Models.{dt.TableName} model)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tStringBuilder strSql = new StringBuilder(50);\r\n");
             result.Append($"\t\t\tstrSql.Append(\"UPDATE {dt.TableName} SET \");\r\n");
@@ -219,7 +222,7 @@ namespace DAL.Table
         {
             string result = "";
 
-            result += $"\t\tpublic Models.{dt.TableName} GetModel(int id)\r\n";
+            result += $"\t\tpublic {nameSpace}Models.{dt.TableName} GetModel(int id)\r\n";
             result += "\t\t{\r\n";
             result += "\t\t\tstring queryString = $" + "\"SELECT TOP 1 * FROM " + dt.TableName + " WHERE Id = {id}\";\r\n";
             result += "\t\t\tDataTable dt = DbHelperSQL.Query(queryString).Tables[0];\r\n";
@@ -233,7 +236,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic IDAL<Models.{dt.TableName}> Field(string field)\r\n");
+            result.Append($"\t\tpublic IDAL<{nameSpace}Models.{dt.TableName}> Field(string field)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tif (string.IsNullOrWhiteSpace(field))\r\n");
             result.Append("\t\t\t\treturn this;\r\n\r\n");
@@ -248,7 +251,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic IDAL<Models.{dt.TableName}> GroupBy(string groupBy)\r\n");
+            result.Append($"\t\tpublic IDAL<{nameSpace}Models.{dt.TableName}> GroupBy(string groupBy)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tif (string.IsNullOrWhiteSpace(groupBy))\r\n");
             result.Append("\t\t\t\treturn this;\r\n\r\n");
@@ -263,7 +266,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic IDAL<Models.{dt.TableName}> OrderBy(string orderBy)\r\n");
+            result.Append($"\t\tpublic IDAL<{nameSpace}Models.{dt.TableName}> OrderBy(string orderBy)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tif (string.IsNullOrWhiteSpace(orderBy))\r\n");
             result.Append("\t\t\t\treturn this;\r\n\r\n");
@@ -278,7 +281,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic IDAL<Models.{dt.TableName}> Table(string table)\r\n");
+            result.Append($"\t\tpublic IDAL<{nameSpace}Models.{dt.TableName}> Table(string table)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tif (string.IsNullOrWhiteSpace(table))\r\n");
             result.Append("\t\t\t\treturn this;\r\n\r\n");
@@ -293,7 +296,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic IDAL<Models.{dt.TableName}> Where(string where)\r\n");
+            result.Append($"\t\tpublic IDAL<{nameSpace}Models.{dt.TableName}> Where(string where)\r\n");
             result.Append("\t\t{\r\n");
             result.Append("\t\t\tif (string.IsNullOrWhiteSpace(where))\r\n");
             result.Append("\t\t\t\treturn this;\r\n\r\n");
@@ -322,7 +325,7 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(50);
 
-            result.Append($"\t\tpublic List<Models.{dt.TableName}> GetList()\r\n");
+            result.Append($"\t\tpublic List<{nameSpace}Models.{dt.TableName}> GetList()\r\n");
             result.Append($"\t\t{{\r\n");
             result.Append($"\t\t\tstring queryString = $\"SELECT * FROM {dt.TableName}\";\r\n");
             result.Append($"\t\t\tif (!string.IsNullOrWhiteSpace(where))\r\n");
@@ -340,12 +343,12 @@ namespace DAL.Table
         {
             StringBuilder result = new StringBuilder(300);
 
-            result.Append($"\t\tprivate List<Models.{dt.TableName}> DataTableToList(DataTable dt)\r\n");
+            result.Append($"\t\tprivate List<{nameSpace}Models.{dt.TableName}> DataTableToList(DataTable dt)\r\n");
             result.Append($"\t\t{{\r\n");
-            result.Append($"\t\t\tList<Models.{dt.TableName}> list = new List<Models.{dt.TableName}>(dt.Rows.Count);\r\n\r\n");
+            result.Append($"\t\t\tList<{nameSpace}Models.{dt.TableName}> list = new List<{nameSpace}Models.{dt.TableName}>(dt.Rows.Count);\r\n\r\n");
             result.Append($"\t\t\tforeach (DataRow row in dt.Rows)\r\n");
             result.Append($"\t\t\t{{\r\n");
-            result.Append($"\t\t\t\tModels.{dt.TableName} model = new Models.{dt.TableName}();\r\n");
+            result.Append($"\t\t\t\t{nameSpace}Models.{dt.TableName} model = new {nameSpace}Models.{dt.TableName}();\r\n");
             foreach (DataRow row in dt.Rows)
             {
                 string name = row["COLUMN_NAME"].ToString();
@@ -422,12 +425,14 @@ namespace DAL.Table
 
         private void Out_File(string name, string contents)
         {
-            string filePath = FILE_PATH + name + ".cs";
+            string path = FILE_PATH + "Table/";
+            string filePath = path + name + ".cs";
             if (!Directory.Exists(filePath))
             {
-                Directory.CreateDirectory(FILE_PATH);
+                Directory.CreateDirectory(path);
             }
             File.WriteAllText(filePath, contents);
+            File.Copy(ConfigurationManager.AppSettings["IDALFilePath"], FILE_PATH + "IDAL.cs", true);
         }
     }
 }

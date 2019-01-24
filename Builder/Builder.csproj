@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constructer\Common\TypeConvert.cs" />
+    <Compile Include="Constructer\DAL\CreateFactoryFile.cs" />
     <Compile Include="Constructer\DAL\General_DAL.cs" />
     <Compile Include="Constructer\Models\General_Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

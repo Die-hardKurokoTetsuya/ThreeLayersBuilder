@@ -8,14 +8,17 @@ namespace ThreeLayersBuilder
     {
         static void Main(string[] args)
         {
-            //if (args.Length == 0)
-            //{
-            //    WriteLine("请输入数据库连接字符串");
-            //    return;
-            //}
+            if (args.Length < 1)
+            {
+                WriteLine("请输入命名空间");
+                return;
+            }
 
-            new General_Model().Construct();
-            new General_DAL().Construct();
+            string nameSpace = args[0];
+
+            new General_Model(nameSpace).Construct();
+            new General_DAL(nameSpace).Construct();
+            new CreateFactoryFile(nameSpace).Construct();
 
             WriteLine("执行完毕");
 

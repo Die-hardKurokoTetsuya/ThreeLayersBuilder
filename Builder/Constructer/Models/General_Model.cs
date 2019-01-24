@@ -28,8 +28,11 @@ namespace Builder.Constructer.Models
         private readonly DataSet ds;
         private StringBuilder contents;
 
-        public General_Model()
+        private string nameSpace = "";
+
+        public General_Model(string nameSpace)
         {
+            this.nameSpace = nameSpace + ".";
             //  获取所有表的结构
             ds = GetAllTablesStruct();
         }
@@ -56,7 +59,7 @@ namespace Builder.Constructer.Models
                 contents.Append(
                     $@"using System;
 
-namespace Models
+namespace {nameSpace}Models
 {{
     public class {dt.TableName} : ICloneable
     {{
